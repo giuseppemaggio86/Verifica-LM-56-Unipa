@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifica Requisiti LM-56 | UNIPA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #005b9f;
+    }
+
+    .description {
+      max-width: 800px;
+      margin: auto;
+      font-size: 16px;
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    form {
+      margin-top: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="number"] {
+      width: 100px;
+      padding: 5px;
+      margin-left: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #005b9f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004577;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .contact {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Verifica Requisiti per l’accesso alla LM-56</h1>
+
+  <div class="description">
+    <p>Questa pagina consente agli studenti di verificare il possesso dei requisiti curriculari richiesti per l’accesso alla Laurea Magistrale in <strong>Scienze dell’Economia (LM-56)</strong> presso l’Università degli Studi di Palermo.</p>
+
+    <h3>✅ Requisiti richiesti</h3>
+    <ul>
+      <li><strong>6 CFU</strong> in SSD di tipo <strong>IUS</strong> (discipline giuridiche: es. diritto privato, diritto pubblico, ecc.)</li>
+      <li><strong>18 CFU</strong> totali in <strong>SECS-P/01, SECS-P/02, SECS-P/03, SECS-P/05, SECS-P/06</strong> (area economica pura)</li>
+      <li><strong>10 CFU</strong> totali in <strong>SECS-P/07 – SECS-P/11</strong> (area aziendale e gestionale)</li>
+      <li><strong>14 CFU</strong> totali in <strong>SECS-S/01 – SECS-S/06</strong> (area statistico-quantitativa)</li>
+    </ul>
+
+    <h3>ℹ️ Esenzioni</h3>
+    <p>Sono esentati dalla verifica dei requisiti curriculari:</p>
+    <ul>
+      <li>I laureati/laureandi in: <strong>Classe 17, 28, 35, 39</strong> (DM 509) oppure <strong>L-33, L-18, L-15, L-37</strong> (DM 270)</li>
+      <li>Che abbiano conseguito la laurea con un voto ≥ <strong>95/110</strong> oppure i laureandi con almeno <strong>30 CFU</strong> nei SSD sopra indicati e media ponderata ≥ <strong>26/30</strong></li>
+    </ul>
+
+    <form id="checkForm">
+      <label>IUS (min 6 CFU): <input type="number" id="ius" required></label>
+      <label>SECS-P/01, P/02, P/03, P/05, P/06 (min 18 CFU): <input type="number" id="p01_06" required></label>
+      <label>SECS-P/07 – P/11 (min 10 CFU): <input type="number" id="p07_11" required></label>
+      <label>SECS-S/01 – S/06 (min 14 CFU): <input type="number" id="s01_06" required></label>
+      <button type="submit">Verifica</button>
+    </form>
+
+    <div id="result"></div>
+
+    <div class="contact" id="contact-message" style="display: none;">
+      ⚠️ <strong>Non soddisfi i requisiti curriculari.</strong><br>
+      Ti invitiamo a contattare il Coordinatore del Corso di Laurea Prof. <strong>Vincenzo Provenzano</strong>  
+      (<a href="mailto:Vincenzo.Provenzano@unipa.it">Vincenzo.Provenzano@unipa.it</a>)<br>
+      o il Delegato alla Didattica Prof. <strong>Giuseppe Maggio</strong>  
+      (<a href="mailto:Giuseppe.Maggio12@unipa.it">Giuseppe.Maggio12@unipa.it</a>)  
+      per valutare eventuali percorsi di recupero CFU.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("checkForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const ius = parseFloat(document.getElementById("ius").value);
+      const p01_06 = parseFloat(document.getElementById("p01_06").value);
+      const p07_11 = parseFloat(document.getElementById("p07_11").value);
+      const s01_06 = parseFloat(document.getElementById("s01_06").value);
+
+      let messages = [];
+      if (ius < 6) messages.push("CFU insufficienti in IUS (min 6)");
+      if (p01_06 < 18) messages.push("CFU insufficienti in SECS-P/01–06 (min 18)");
+      if (p07_11 < 10) messages.push("CFU insufficienti in SECS-P/07–11 (min 10)");
+      if (s01_06 < 14) messages.push("CFU insufficienti in SECS-S/01–06 (min 14)");
+
+      const result = document.getElementById("result");
+      const contact = document.getElementById("contact-message");
+
+      if (messages.length === 0) {
+        result.textContent = "✅ Requisiti soddisfatti per l’accesso alla LM-56!";
+        result.className = "success";
+        contact.style.display = "none";
+      } else {
+        result.innerHTML = "❌ Requisiti mancanti:<br>" + messages.join("<br>");
+        result.className = "error";
+        contact.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
